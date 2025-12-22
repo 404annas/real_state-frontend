@@ -1,0 +1,40 @@
+import { Routes, Route, Navigate } from "react-router-dom"
+import Layout from "./components/Layout/Layout"
+import Login from "./pages/Auth/Login"
+import Register from "./pages/Auth/Register"
+import Dashboard from "./pages/Dashboard/Dashboard"
+import Properties from "./pages/Properties/Properties"
+import PropertyForm from "./pages/Properties/PropertyForm"
+import PropertyDetail from "./pages/Properties/PropertyDetail"
+import Users from "./pages/Users/Users"
+import Settings from "./pages/Settings/Settings"
+import PrivateRoute from "./components/shared/PrivateRoute"
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Layout />
+          </PrivateRoute>
+        }
+      >
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="properties" element={<Properties />} />
+        <Route path="properties/new" element={<PropertyForm />} />
+        <Route path="properties/:id" element={<PropertyDetail />} />
+        <Route path="properties/:id/edit" element={<PropertyForm />} />
+        <Route path="users" element={<Users />} />
+        <Route path="settings" element={<Settings />} />
+      </Route>
+    </Routes>
+  )
+}
+
+export default App
