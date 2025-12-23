@@ -26,7 +26,7 @@ const Dashboard = () => {
       bgColor: "bg-green-100",
     },
     {
-      label: "Featured Properties",
+      label: "Properties",
       value: "0",
       icon: TrendingUp,
       color: "text-yellow-500",

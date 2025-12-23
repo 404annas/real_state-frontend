@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-neutral-200 sticky top-0 z-30">
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex items-center justify-between px-6 py-[18px]">
         {/* Left Side */}
         <div className="flex items-center gap-4">
           <button

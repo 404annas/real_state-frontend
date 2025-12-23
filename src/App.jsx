@@ -9,31 +9,36 @@ import PropertyDetail from "./pages/Properties/PropertyDetail"
 import Users from "./pages/Users/Users"
 import Settings from "./pages/Settings/Settings"
 import PrivateRoute from "./components/shared/PrivateRoute"
+import { Toaster } from "sonner"
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+    <>
+      <Toaster position="bottom-right" richColors />
+      <Routes>
 
-      <Route
-        path="/"
-        element={
-          <PrivateRoute>
-            <Layout />
-          </PrivateRoute>
-        }
-      >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="properties" element={<Properties />} />
-        <Route path="properties/new" element={<PropertyForm />} />
-        <Route path="properties/:id" element={<PropertyDetail />} />
-        <Route path="properties/:id/edit" element={<PropertyForm />} />
-        <Route path="users" element={<Users />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-    </Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Layout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="properties" element={<Properties />} />
+          <Route path="properties/new" element={<PropertyForm />} />
+          <Route path="properties/:id" element={<PropertyDetail />} />
+          <Route path="properties/:id/edit" element={<PropertyForm />} />
+          <Route path="users" element={<Users />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
 
