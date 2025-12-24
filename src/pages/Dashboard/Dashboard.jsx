@@ -1,47 +1,99 @@
 "use client"
 import { useNavigate } from "react-router-dom"
-import { Building2, Users, TrendingUp, Eye } from "lucide-react"
+import { Building2, Users, MessageCircle, Eye } from "lucide-react"
 import Card from "../../components/ui/Card"
 import Button from "../../components/ui/Button"
-import { useGetPropertiesQuery } from "../../store/api/propertyApi"
 import Loader from "../../components/ui/Loader"
+import { useState, useEffect } from "react"
 
 const Dashboard = () => {
   const navigate = useNavigate()
-  const { data, isLoading } = useGetPropertiesQuery({ limit: 5 })
+  const [propertiesData, setPropertiesData] = useState(null)
+  const [usersData, setUsersData] = useState(null)
+  const [inquiriesData, setInquiriesData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+
+        // Fetch properties
+        const propertiesResponse = await fetch('http://localhost:8001/api/v1/properties/admin/all?limit=5', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const propertiesResult = await propertiesResponse.json();
+        setPropertiesData(propertiesResult);
+
+        // Fetch users
+        const usersResponse = await fetch('http://localhost:8001/api/v1/users', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const usersResult = await usersResponse.json();
+        setUsersData(usersResult);
+
+        // Fetch inquiries
+        const inquiriesResponse = await fetch('http://localhost:8001/api/v1/inquiries', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const inquiriesResult = await inquiriesResponse.json();
+        setInquiriesData(inquiriesResult);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Calculate stats
+  const totalProperties = propertiesData?.data?.pagination?.total || 0
+  const totalUsers = usersData?.data?.pagination?.total || 0
+  const totalInquiries = inquiriesData?.data?.pagination?.total || 0
+
+  // Calculate total views from properties
+  const totalViews = propertiesData?.data?.properties?.reduce((sum, property) => sum + (property.totalVisits || 0), 0) || 0
 
   const stats = [
     {
       label: "Total Properties",
-      value: data?.data?.totalResults || 0,
+      value: totalProperties,
       icon: Building2,
       color: "text-primary-500",
       bgColor: "bg-primary-100",
     },
     {
       label: "Total Users",
-      value: "0",
+      value: totalUsers,
       icon: Users,
       color: "text-green-500",
       bgColor: "bg-green-100",
     },
     {
-      label: "Properties",
-      value: "0",
-      icon: TrendingUp,
-      color: "text-yellow-500",
-      bgColor: "bg-yellow-100",
+      label: "Total Inquiries",
+      value: totalInquiries,
+      icon: MessageCircle,
+      color: "text-blue-500",
+      bgColor: "bg-blue-100",
     },
     {
       label: "Total Views",
-      value: "0",
+      value: totalViews,
       icon: Eye,
       color: "text-purple-500",
       bgColor: "bg-purple-100",
     },
   ]
 
-  if (isLoading) return <Loader fullScreen />
+  if (loading) return <Loader fullScreen />
 
   return (
     <div className="space-y-6">
@@ -80,7 +132,7 @@ const Dashboard = () => {
         </div>
 
         <div className="space-y-3">
-          {data?.data?.properties?.slice(0, 5).map((property) => (
+          {propertiesData?.data?.properties?.slice(0, 5).map((property) => (
             <div
               key={property._id}
               className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer"

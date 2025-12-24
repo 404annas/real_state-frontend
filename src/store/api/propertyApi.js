@@ -9,6 +9,13 @@ export const propertyApi = api.injectEndpoints({
       }),
       providesTags: ["Property"],
     }),
+    getPropertiesAdmin: builder.query({
+      query: (params = {}) => ({
+        url: "/properties/admin/all",
+        params,
+      }),
+      providesTags: ["Property"],
+    }),
     getPropertyById: builder.query({
       query: (id) => `/properties/${id}`,
       providesTags: (result, error, id) => [{ type: "Property", id }],
@@ -18,16 +25,25 @@ export const propertyApi = api.injectEndpoints({
         url: "/properties",
         method: "POST",
         body: formData,
+        headers: {
+          // Don't set Content-Type header - let the browser set it with the correct boundary
+        },
       }),
       invalidatesTags: ["Property"],
     }),
     updateProperty: builder.mutation({
-      query: ({ id, ...data }) => ({
-        url: `/properties/${id}`,
-        method: "PATCH",
-        body: data,
-      }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Property", id }, "Property"],
+      query: (request) => {
+        const { id, body } = request;
+        return {
+          url: `/properties/${id}`,
+          method: "PATCH",
+          body: body,
+          headers: {
+            // Don't set Content-Type header - let the browser set it with the correct boundary
+          },
+        };
+      },
+      invalidatesTags: (result, error, request) => [{ type: "Property", id: request.id }, "Property"],
     }),
     deleteProperty: builder.mutation({
       query: (id) => ({
@@ -44,6 +60,7 @@ export const propertyApi = api.injectEndpoints({
 
 export const {
   useGetPropertiesQuery,
+  useGetPropertiesAdminQuery,
   useGetPropertyByIdQuery,
   useCreatePropertyMutation,
   useUpdatePropertyMutation,

@@ -9,7 +9,7 @@ import Input from "../../components/ui/Input"
 import Badge from "../../components/ui/Badge"
 import Modal from "../../components/ui/Modal"
 import Loader from "../../components/ui/Loader"
-import { useGetPropertiesQuery, useDeletePropertyMutation } from "../../store/api/propertyApi"
+import { useGetPropertiesAdminQuery, useDeletePropertyMutation } from "../../store/api/propertyApi"
 import { toast } from "sonner"
 
 const Properties = () => {
@@ -18,7 +18,7 @@ const Properties = () => {
   const [page, setPage] = useState(1)
   const [deleteModal, setDeleteModal] = useState({ open: false, id: null })
 
-  const { data, isLoading, isFetching } = useGetPropertiesQuery({ page, limit: 10 })
+  const { data, isLoading, isFetching } = useGetPropertiesAdminQuery({ page, limit: 10, search: searchTerm })
   const [deleteProperty, { isLoading: isDeleting }] = useDeletePropertyMutation()
 
   const handleDelete = async () => {
@@ -30,12 +30,6 @@ const Properties = () => {
       toast.error(error?.data?.message || "Failed to delete property")
     }
   }
-
-  const filteredProperties = data?.data?.properties?.filter(
-    (property) =>
-      property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.address?.city?.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
 
   if (isLoading) return <Loader fullScreen />
 
@@ -72,7 +66,7 @@ const Properties = () => {
         <Loader />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProperties?.map((property) => (
+          {data?.data?.properties?.map((property) => (
             <Card key={property._id} padding={false} hover>
               <img
                 src={property.images?.[0] || "/placeholder.svg?height=200&width=400"}
@@ -122,18 +116,18 @@ const Properties = () => {
       )}
 
       {/* Pagination */}
-      {data?.data?.totalPages > 1 && (
+      {data?.data?.pagination?.pages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(page - 1)}>
             Previous
           </Button>
           <span className="text-sm text-neutral-600">
-            Page {page} of {data?.data?.totalPages}
+            Page {page} of {data?.data?.pagination?.pages}
           </span>
           <Button
             variant="outline"
             size="sm"
-            disabled={page === data?.data?.totalPages}
+            disabled={page === data?.data?.pagination?.pages}
             onClick={() => setPage(page + 1)}
           >
             Next

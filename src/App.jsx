@@ -7,7 +7,9 @@ import Properties from "./pages/Properties/Properties"
 import PropertyForm from "./pages/Properties/PropertyForm"
 import PropertyDetail from "./pages/Properties/PropertyDetail"
 import Users from "./pages/Users/Users"
+import Inquiries from "./pages/Inquiries/Inquiries"
 import Settings from "./pages/Settings/Settings"
+import Profile from "./pages/Profile/Profile"
 import PrivateRoute from "./components/shared/PrivateRoute"
 import { Toaster } from "sonner"
 
@@ -35,6 +37,8 @@ function App() {
           <Route path="properties/:id" element={<PropertyDetail />} />
           <Route path="properties/:id/edit" element={<PropertyForm />} />
           <Route path="users" element={<Users />} />
+          <Route path="inquiries" element={<Inquiries />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

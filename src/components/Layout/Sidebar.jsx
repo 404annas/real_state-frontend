@@ -2,7 +2,7 @@
 import { NavLink } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useSelector } from "react-redux"
-import { LayoutDashboard, Building2, Users, Settings, X } from "lucide-react"
+import { LayoutDashboard, Building2, Users, MessageCircle, Settings, User, X } from "lucide-react"
 
 const Sidebar = ({ onClose }) => {
   const { sidebarOpen } = useSelector((state) => state.ui)
@@ -11,6 +11,8 @@ const Sidebar = ({ onClose }) => {
     { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
     { icon: Building2, label: "Properties", path: "/properties" },
     { icon: Users, label: "Users", path: "/users" },
+    { icon: MessageCircle, label: "Inquiries", path: "/inquiries" },
+    { icon: User, label: "Profile", path: "/profile" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ]
 
