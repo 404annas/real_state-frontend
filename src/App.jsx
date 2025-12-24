@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard/Dashboard"
 import Properties from "./pages/Properties/Properties"
 import PropertyForm from "./pages/Properties/PropertyForm"
 import PropertyDetail from "./pages/Properties/PropertyDetail"
+import BuyProperties from "./pages/Properties/Buy/BuyProperties"
+import RentProperties from "./pages/Properties/Rent/RentProperties"
 import Users from "./pages/Users/Users"
 import Inquiries from "./pages/Inquiries/Inquiries"
 import Settings from "./pages/Settings/Settings"
@@ -33,6 +35,8 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="properties" element={<Properties />} />
+          <Route path="properties/buy" element={<BuyProperties />} />
+          <Route path="properties/rent" element={<RentProperties />} />
           <Route path="properties/new" element={<PropertyForm />} />
           <Route path="properties/:id" element={<PropertyDetail />} />
           <Route path="properties/:id/edit" element={<PropertyForm />} />
