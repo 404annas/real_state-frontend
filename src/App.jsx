@@ -14,10 +14,11 @@ import Settings from "./pages/Settings/Settings"
 import Profile from "./pages/Profile/Profile"
 import PrivateRoute from "./components/shared/PrivateRoute"
 import { Toaster } from "sonner"
+import { SessionExpirationHandler } from "./utils/session"
 
 function App() {
   return (
-    <>
+    <SessionExpirationHandler>
       <Toaster position="bottom-right" richColors />
       <Routes>
 
@@ -46,7 +47,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
-    </>
+    </SessionExpirationHandler>
   )
 }
 

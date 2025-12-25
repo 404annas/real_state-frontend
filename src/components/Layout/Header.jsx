@@ -15,12 +15,16 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
+      // Try to call the backend logout endpoint
       await logoutMutation().unwrap()
-      dispatch(logout())
       toast.success("Logged out successfully")
-      navigate("/login")
     } catch (error) {
-      toast.error("Logout failed")
+      // If backend logout fails, still proceed with frontend logout
+      toast.error("Logout failed, but you will be logged out from this session")
+    } finally {
+      // Always dispatch local logout and redirect
+      dispatch(logout())
+      navigate("/login")
     }
   }
 
