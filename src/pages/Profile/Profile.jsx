@@ -6,6 +6,8 @@ import Input from "../../components/ui/Input"
 import { toast } from "sonner"
 import Loader from "../../components/ui/Loader"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Profile = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
@@ -24,7 +26,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-        const response = await fetch('http://localhost:8001/api/v1/users/profile', { // This endpoint might need to be created
+        const response = await fetch(`${API_URL}/users/profile`, { // This endpoint might need to be created
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -70,7 +72,7 @@ const Profile = () => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
       // First, update the profile details
-      const profileResponse = await fetch('http://localhost:8001/api/v1/users/profile', {
+      const profileResponse = await fetch(`${API_URL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -97,7 +99,7 @@ const Profile = () => {
         const avatarFormData = new FormData();
         avatarFormData.append('avatar', avatarFile);
 
-        const avatarResponse = await fetch('http://localhost:8001/api/v1/users/profile/avatar', {
+        const avatarResponse = await fetch(`${API_URL}/users/profile/avatar`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`

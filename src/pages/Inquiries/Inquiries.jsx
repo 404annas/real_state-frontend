@@ -2,6 +2,8 @@ import Card from "../../components/ui/Card"
 import Loader from "../../components/ui/Loader"
 import { useState, useEffect } from "react"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Inquiries = () => {
   const [inquiries, setInquiries] = useState([])
   const [loading, setLoading] = useState(true)
@@ -11,7 +13,7 @@ const Inquiries = () => {
     const fetchInquiries = async () => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-        const response = await fetch('http://localhost:8001/api/v1/inquiries', {
+        const response = await fetch(`${API_URL}/inquiries`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

@@ -2,8 +2,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { logout } from "../slices/authSlice"
 import { toast } from "sonner"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:8001/api/v1",
+  baseUrl: API_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token
     if (token) {

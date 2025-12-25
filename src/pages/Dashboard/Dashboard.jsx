@@ -6,6 +6,8 @@ import Button from "../../components/ui/Button"
 import Loader from "../../components/ui/Loader"
 import { useState, useEffect } from "react"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Dashboard = () => {
   const navigate = useNavigate()
   const [propertiesData, setPropertiesData] = useState(null)
@@ -19,7 +21,7 @@ const Dashboard = () => {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token');
 
         // Fetch properties
-        const propertiesResponse = await fetch('http://localhost:8001/api/v1/properties/admin/all?limit=5', {
+        const propertiesResponse = await fetch(`${API_URL}/properties/admin/all?limit=5`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -28,7 +30,7 @@ const Dashboard = () => {
         setPropertiesData(propertiesResult);
 
         // Fetch users
-        const usersResponse = await fetch('http://localhost:8001/api/v1/users', {
+        const usersResponse = await fetch(`${API_URL}/users`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -37,7 +39,7 @@ const Dashboard = () => {
         setUsersData(usersResult);
 
         // Fetch inquiries
-        const inquiriesResponse = await fetch('http://localhost:8001/api/v1/inquiries', {
+        const inquiriesResponse = await fetch(`${API_URL}/inquiries`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
