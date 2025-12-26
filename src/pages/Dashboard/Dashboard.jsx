@@ -6,8 +6,9 @@ import Button from "../../components/ui/Button"
 import Loader from "../../components/ui/Loader"
 import { useState, useEffect } from "react"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+const API_URL = typeof process !== 'undefined'
+  ? process.env.NEXT_PUBLIC_API_URL
+  : 'https://real-state-backend-omega.vercel.app/api/v1';
 const Dashboard = () => {
   const navigate = useNavigate()
   const [propertiesData, setPropertiesData] = useState(null)

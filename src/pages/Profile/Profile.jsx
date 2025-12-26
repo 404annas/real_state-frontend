@@ -6,8 +6,10 @@ import Input from "../../components/ui/Input"
 import { toast } from "sonner"
 import Loader from "../../components/ui/Loader"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+const API_URL = typeof process !== 'undefined'
+  ? process.env.NEXT_PUBLIC_API_URL
+  : 'https://real-state-backend-omega.vercel.app/api/v1';
+  
 const Profile = () => {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)

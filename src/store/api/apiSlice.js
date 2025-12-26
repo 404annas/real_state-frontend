@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { logout } from "../slices/authSlice"
 import { toast } from "sonner"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = typeof process !== 'undefined'
+  ? process.env.NEXT_PUBLIC_API_URL
+  : 'https://real-state-backend-omega.vercel.app/api/v1';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,

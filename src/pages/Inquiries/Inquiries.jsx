@@ -2,8 +2,9 @@ import Card from "../../components/ui/Card"
 import Loader from "../../components/ui/Loader"
 import { useState, useEffect } from "react"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+const API_URL = typeof process !== 'undefined'
+  ? process.env.NEXT_PUBLIC_API_URL
+  : 'https://real-state-backend-omega.vercel.app/api/v1';
 const Inquiries = () => {
   const [inquiries, setInquiries] = useState([])
   const [loading, setLoading] = useState(true)
