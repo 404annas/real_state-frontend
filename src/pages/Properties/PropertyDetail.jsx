@@ -97,7 +97,23 @@ const PropertyDetail = () => {
               <h2 className="text-xl font-semibold text-neutral-900 mb-3">Description</h2>
               <p className="text-neutral-600 leading-relaxed">{property?.description}</p>
             </div>
+
           </Card>
+          
+          {property?.floorPlans?.length > 0 && (
+            <Card>
+              <h2 className="text-xl font-semibold text-neutral-900 mb-4">Floor Plans</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {property.floorPlans.map((plan, index) => (
+                  <div key={index} className="border rounded-lg p-2">
+                    <p className="text-sm font-medium mb-2">{plan.title}</p>
+                    <img src={plan.fileUrl} alt={plan.title} className="w-full h-auto rounded" />
+                    <a href={plan.fileUrl} target="_blank" className="text-xs text-primary-500 underline mt-2 block">View Full Size</a>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
           {/* Property Features */}
           <Card>
@@ -239,7 +255,14 @@ const PropertyDetail = () => {
           </Card>
 
           <Card>
-            <h3 className="font-semibold text-neutral-900 mb-4">Owner Details</h3>
+            <div className="flex items-center gap-4 mb-4">
+              <img
+                src={property?.owner?.avatar || "/placeholder.svg"}
+                className="w-12 h-12 rounded-full object-cover border"
+                alt="Owner"
+              />
+              <h3 className="font-semibold text-neutral-900">Owner Details</h3>
+            </div>
             <div className="space-y-3">
               <div>
                 <p className="text-sm text-neutral-600">Name</p>

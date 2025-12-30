@@ -2,9 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { logout } from "../slices/authSlice"
 import { toast } from "sonner"
 
-const API_URL = typeof process !== 'undefined'
-  ? process.env.NEXT_PUBLIC_API_URL
-  : 'https://real-state-backend-omega.vercel.app/api/v1';
+const API_URL =
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost')
+    ? 'http://localhost:8001/api/v1'  // Use local backend when running on localhost
+    : (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_API_URL)
+      ? process.env.NEXT_PUBLIC_API_URL
+      : 'https://real-state-backend-omega.vercel.app/api/v1';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_URL,

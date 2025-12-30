@@ -74,6 +74,9 @@ const PropertyForm = () => {
     images: [],
     floorPlans: [],
     ownerAvatar: null,
+    // Track which existing images/floor plans to keep
+    existingImagesToKeep: [],
+    existingFloorPlansToKeep: [],
   })
 
   useEffect(() => {
@@ -125,6 +128,8 @@ const PropertyForm = () => {
         images: property.images || [],
         floorPlans: property.floorPlans || [],
         ownerAvatar: null, // Don't load avatar for editing - it's not part of the form data
+        existingImagesToKeep: property.images || [], // Keep all existing images by default
+        existingFloorPlansToKeep: property.floorPlans || [], // Keep all existing floor plans by default
       })
     }
   }, [isEditMode, propertyData])
@@ -194,15 +199,52 @@ const PropertyForm = () => {
 
       // Add images to FormData
       if (formData.images && formData.images.length > 0) {
+        const newImages = [];
+        const existingImageUrls = [];
+
         for (let i = 0; i < formData.images.length; i++) {
-          propertyData.append('images', formData.images[i])
+          // Check if it's a File object (has a name property) and not just a URL string
+          if (formData.images[i] instanceof File) {
+            newImages.push(formData.images[i]);
+          } else {
+            // If it's an existing URL, store it separately to send as strings
+            existingImageUrls.push(formData.images[i]);
+          }
+        }
+
+        // Append new images as files
+        for (const image of newImages) {
+          propertyData.append('images', image);
+        }
+
+        // Append existing image URLs as strings to preserve them
+        for (const imageUrl of existingImageUrls) {
+          propertyData.append('existingImages', imageUrl);
         }
       }
 
       // Add floor plans to FormData
       if (formData.floorPlans && formData.floorPlans.length > 0) {
+        const newFloorPlans = [];
+        const existingFloorPlanObjects = [];
+
         for (let i = 0; i < formData.floorPlans.length; i++) {
-          propertyData.append('floorPlans', formData.floorPlans[i])
+          if (formData.floorPlans[i] instanceof File) {
+            newFloorPlans.push(formData.floorPlans[i]);
+          } else {
+            // If it's an existing floor plan object, store it separately
+            existingFloorPlanObjects.push(formData.floorPlans[i]);
+          }
+        }
+
+        // Append new floor plans as files
+        for (const floorPlan of newFloorPlans) {
+          propertyData.append('floorPlans', floorPlan);
+        }
+
+        // Append existing floor plan objects as strings to preserve them
+        for (const floorPlanObj of existingFloorPlanObjects) {
+          propertyData.append('existingFloorPlans', JSON.stringify(floorPlanObj));
         }
       }
 
@@ -337,7 +379,7 @@ const PropertyForm = () => {
                 type="checkbox"
                 name="isNew"
                 checked={formData.isNew}
-                onChange={(e) => setFormData({...formData, isNew: e.target.checked})}
+                onChange={(e) => setFormData({ ...formData, isNew: e.target.checked })}
                 className="rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
               />
               <span className="text-neutral-700">New</span>
@@ -347,7 +389,7 @@ const PropertyForm = () => {
                 type="checkbox"
                 name="isFeatured"
                 checked={formData.isFeatured}
-                onChange={(e) => setFormData({...formData, isFeatured: e.target.checked})}
+                onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
                 className="rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
               />
               <span className="text-neutral-700">Featured</span>
@@ -357,7 +399,7 @@ const PropertyForm = () => {
                 type="checkbox"
                 name="isTrending"
                 checked={formData.isTrending}
-                onChange={(e) => setFormData({...formData, isTrending: e.target.checked})}
+                onChange={(e) => setFormData({ ...formData, isTrending: e.target.checked })}
                 className="rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
               />
               <span className="text-neutral-700">Trending</span>
@@ -580,7 +622,7 @@ const PropertyForm = () => {
                 accept="image/*"
                 onChange={(e) => {
                   const files = Array.from(e.target.files || []);
-                  setFormData(prev => ({...prev, images: files}));
+                  setFormData(prev => ({ ...prev, images: files }));
                 }}
                 className="w-full text-sm text-neutral-500
                   file:mr-4 file:py-2 file:px-4
@@ -600,7 +642,7 @@ const PropertyForm = () => {
                 accept="image/*,application/pdf"
                 onChange={(e) => {
                   const files = Array.from(e.target.files || []);
-                  setFormData(prev => ({...prev, floorPlans: files}));
+                  setFormData(prev => ({ ...prev, floorPlans: files }));
                 }}
                 className="w-full text-sm text-neutral-500
                   file:mr-4 file:py-2 file:px-4
@@ -626,7 +668,7 @@ const PropertyForm = () => {
                 onChange={(e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    setFormData(prev => ({...prev, ownerAvatar: file}));
+                    setFormData(prev => ({ ...prev, ownerAvatar: file }));
                   }
                 }}
                 className="w-full text-sm text-neutral-500
@@ -643,28 +685,28 @@ const PropertyForm = () => {
               label="Owner Full Name"
               name="ownerFullName"
               value={formData.ownerFullName}
-              onChange={(e) => setFormData({...formData, ownerFullName: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerFullName: e.target.value })}
               placeholder="John Doe"
             />
             <Input
               label="Owner Username"
               name="ownerUsername"
               value={formData.ownerUsername}
-              onChange={(e) => setFormData({...formData, ownerUsername: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerUsername: e.target.value })}
               placeholder="johndoe"
             />
             <Input
               label="Owner Phone Number"
               name="ownerPhoneNumber"
               value={formData.ownerPhoneNumber}
-              onChange={(e) => setFormData({...formData, ownerPhoneNumber: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerPhoneNumber: e.target.value })}
               placeholder="+1234567890"
             />
             <Input
               label="Owner WhatsApp Number"
               name="ownerWhatsAppNumber"
               value={formData.ownerWhatsAppNumber}
-              onChange={(e) => setFormData({...formData, ownerWhatsAppNumber: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerWhatsAppNumber: e.target.value })}
               placeholder="+1234567890"
             />
             <Input
@@ -672,14 +714,14 @@ const PropertyForm = () => {
               name="ownerEmail"
               type="email"
               value={formData.ownerEmail}
-              onChange={(e) => setFormData({...formData, ownerEmail: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerEmail: e.target.value })}
               placeholder="owner@example.com"
             />
             <Input
               label="Owner Agent Title"
               name="ownerAgentTitle"
               value={formData.ownerAgentTitle}
-              onChange={(e) => setFormData({...formData, ownerAgentTitle: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, ownerAgentTitle: e.target.value })}
               placeholder="Company Agent"
             />
           </div>
