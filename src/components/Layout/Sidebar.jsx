@@ -19,6 +19,7 @@ const Sidebar = ({ onClose }) => {
         { label: "All Properties", path: "/properties", icon: Building2 },
         { label: "Buy Properties", path: "/properties/buy", icon: DollarSign },
         { label: "Rent Properties", path: "/properties/rent", icon: Calendar },
+        { label: "Sell Properties", path: "/properties/sell", icon: Home },
       ]
     },
     { icon: Users, label: "Users", path: "/users" },

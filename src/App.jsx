@@ -8,6 +8,7 @@ import PropertyForm from "./pages/Properties/PropertyForm"
 import PropertyDetail from "./pages/Properties/PropertyDetail"
 import BuyProperties from "./pages/Properties/Buy/BuyProperties"
 import RentProperties from "./pages/Properties/Rent/RentProperties"
+import SellProperties from "./pages/Properties/Sell/SellProperties"
 import Users from "./pages/Users/Users"
 import Inquiries from "./pages/Inquiries/Inquiries"
 import Settings from "./pages/Settings/Settings"
@@ -38,6 +39,7 @@ function App() {
           <Route path="properties" element={<Properties />} />
           <Route path="properties/buy" element={<BuyProperties />} />
           <Route path="properties/rent" element={<RentProperties />} />
+          <Route path="properties/sell" element={<SellProperties />} />
           <Route path="properties/new" element={<PropertyForm />} />
           <Route path="properties/:id" element={<PropertyDetail />} />
           <Route path="properties/:id/edit" element={<PropertyForm />} />

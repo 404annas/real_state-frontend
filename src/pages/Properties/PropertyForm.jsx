@@ -309,6 +309,7 @@ const PropertyForm = () => {
               options={[
                 { value: "Rent", label: "For Rent" },
                 { value: "Buy", label: "For Buy" },
+                { value: "Sell", label: "For Sell" },
               ]}
               fullWidth
             />
